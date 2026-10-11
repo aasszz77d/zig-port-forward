@@ -3,7 +3,7 @@ const net = std.net;
 const Thread = std.Thread;
 const log = std.log;
 
-pub const std_options = .{
+pub const std_options: std.Options = .{
     .log_level = .info,
 };
 
@@ -81,9 +81,7 @@ fn handleConnection(client: net.Server.Connection, remote_host: []const u8, remo
 }
 
 pub fn main() !void {
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    defer _ = gpa.deinit();
-    const allocator = gpa.allocator();
+    const allocator = std.heap.page_allocator;
 
     var args = try std.process.argsWithAllocator(allocator);
     defer args.deinit();
